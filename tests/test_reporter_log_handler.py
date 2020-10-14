@@ -1,3 +1,4 @@
+from logging import Logger
 from pathlib import Path
 import unittest
 import logging
@@ -9,31 +10,12 @@ class TestReporterLogHandler(unittest.TestCase):
   A test class that verifies the operation of `ReporterLogHandler`.
   """
 
-  def setUp(self):
-    """
-    Executed for each test method call.
-    """
-    pass
-
   def tearDown(self):
     """
     Executed for each test method call.
     """
     logger = logging.getLogger("testlogger")
     logger.handlers.clear()
-
-  @classmethod
-  def setUpClass(self):
-    """
-    Called only once when running a test case.
-    """
-
-  @classmethod
-  def teardownClass(self):
-    """
-    Called only once when running a test case.
-    """
-    pass
 
   def test_get_text_warning(self):
     """
