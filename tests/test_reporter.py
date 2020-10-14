@@ -4,7 +4,7 @@ import unittest
 
 from logreporter.reporter import Reporter
 
-class TestReporterLogHandler(unittest.TestCase):
+class TestReporter(unittest.TestCase):
   """
   A test class that verifies the operation of `Reporter`.
   """
