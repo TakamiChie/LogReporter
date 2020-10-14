@@ -53,9 +53,16 @@ class ReporterLogHandler(logging.FileHandler):
       self.close()
       self._filename.unlink()
 
-  def get_text(self):
+  def get_text(self, max_length=-1):
     """
     Get all the log strings written so far.
+
+    Parameters
+    ----
+    max_length: int
+      Maximum number of characters requested.
+      If this value is set, get the text with the number of lines closest to this number of characters and return it.
+      Also, in this case, the unacquired text is saved in the internal log file.
 
     Returns
     ----
@@ -67,5 +74,19 @@ class ReporterLogHandler(logging.FileHandler):
     if self._filename.exists():
       with open(self._filename, mode="r", encoding="utf-8") as f:
         text = f.read()
-      self.clear()
+      if max_length != -1:
+        lines = text.splitlines()
+        result = []
+        while max_length > 0 and len(lines) > 0:
+          t = lines[0]
+          max_length -= len(t)
+          if max_length >= 0:
+            result.append(t)
+            lines.pop(0)
+            max_length -= len("\n") # Newline character.
+        with open(self._filename, mode="w", encoding="utf-8") as f:
+          f.write("\n".join(lines))
+        text = "\n".join(result)
+      else:
+        self.clear()
     return text
