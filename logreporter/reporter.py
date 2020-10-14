@@ -17,7 +17,7 @@ class Reporter(object):
       cls._instance.__initialize(*args, **kwargs)
     return cls._instance
 
-  def __initialize(self, filename=None, enabled=True, format=):
+  def __initialize(self, filename=None, enabled=True):
     """
     A method that behaves as a constructor.
     This method is only executed when there is no instance of this class in the process.
