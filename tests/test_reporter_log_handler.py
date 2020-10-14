@@ -10,6 +10,17 @@ class TestReporterLogHandler(unittest.TestCase):
   A test class that verifies the operation of `ReporterLogHandler`.
   """
 
+  #region prepare
+
+  def tearDown(self):
+    """
+    Executed for each test method call.
+    """
+    logger = logging.getLogger("testlogger")
+    logger.handlers.clear()
+
+  #endregion
+
   #region constructor test
 
   def test_original_path(self):
@@ -24,17 +35,6 @@ class TestReporterLogHandler(unittest.TestCase):
     self.assertTrue(path.exists())
     rlh.get_text()
     self.assertFalse(path.exists())
-
-  #endregion
-
-  #region prepare
-
-  def tearDown(self):
-    """
-    Executed for each test method call.
-    """
-    logger = logging.getLogger("testlogger")
-    logger.handlers.clear()
 
   #endregion
 
