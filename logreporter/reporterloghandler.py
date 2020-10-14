@@ -19,6 +19,31 @@ class ReporterLogHandler(logging.FileHandler):
     self._filename = Path(__file__).parent / "reporter.log" if filename is None else filename
     super().__init__(self._filename, encoding="utf-8")
     self.level == logging.WARNING
+    self._enabled = True
+
+  @property
+  def enabled(self):
+    """
+    Whether to perform log collection processing. If False is set, log collection will be stopped and all accumulated logs will be deleted.
+    """
+    return self._enabled
+
+  @enabled.setter
+  def enabled(self, value):
+    """
+    Whether to perform log collection processing. If False is set, log collection will be stopped and all accumulated logs will be deleted.
+    """
+    self._enabled = value
+    if not value:
+      self.clear()
+
+  def emit(self, record):
+    """
+    Override method.
+    If the value of enabled is False, no processing is performed.
+    """
+    if self.enabled:
+      super().emit(record)
 
   def clear(self):
     """

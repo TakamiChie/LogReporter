@@ -115,3 +115,24 @@ class TestReporterLogHandler(unittest.TestCase):
     self.assertFalse(rlh._filename.exists())
 
   #endregion
+
+  #region enabled test
+
+  def test_enabled_false(self):
+    """
+    Make sure that all logs are deleted when `ReporterLogHandler#enabled` is set to False.
+    Also, make sure that log collection starts again when set to True.
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("test message")
+    logger.warn("test message")
+    rlh.enabled = False
+    logger.warn("test message")
+    self.assertFalse(rlh._filename.exists())
+    rlh.enabled = True
+    logger.warn("test message")
+    self.assertTrue(rlh._filename.exists())
+
+  #endregion
