@@ -19,7 +19,8 @@ class TestReporterLogHandler(unittest.TestCase):
     """
     Executed for each test method call.
     """
-    pass
+    logger = logging.getLogger("testlogger")
+    logger.handlers.clear()
 
   @classmethod
   def setUpClass(self):
