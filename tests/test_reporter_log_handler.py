@@ -88,6 +88,18 @@ class TestReporterLogHandler(unittest.TestCase):
     logger.warn("test message")
     self.assertFalse(rlh.get_text() == "")
 
+  def test_clear(self):
+    """
+    Confirm that the existing log is deleted when `ReportLogHandler#clear()` is executed without calling `ReportLogHandler#get_text()` after outputting some log.
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("test message")
+    logger.warn("test message")
+    rlh.clear()
+    self.assertFalse(rlh._filename.exists())
+
   def test_original_path(self):
     """
     If you specify your own file path as an argument of the constructor, check that the file is created in the specified folder.

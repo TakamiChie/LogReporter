@@ -20,6 +20,14 @@ class ReporterLogHandler(logging.FileHandler):
     super().__init__(self._filename, encoding="utf-8")
     self.level == logging.WARNING
 
+  def clear(self):
+    """
+    Delete all the log text of the actual acquisition.
+    """
+    if self._filename.exists():
+      self.close()
+      self._filename.unlink()
+
   def get_text(self):
     """
     Get all the log strings written so far.
@@ -34,5 +42,5 @@ class ReporterLogHandler(logging.FileHandler):
     if self._filename.exists():
       with open(self._filename, mode="r", encoding="utf-8") as f:
         text = f.read()
-      self._filename.unlink()
+      self.clear()
     return text
