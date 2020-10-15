@@ -168,6 +168,105 @@ class TestReporterLogHandler(unittest.TestCase):
 
   #endregion
 
+  #region get_text(report) test
+
+  def test_get_text_report_commited(self):
+    """
+    When `ReporterLogHandler#get_text()` is called under the following conditions,
+    The text is passed to the function, and the return value of the function determines whether or not to commit.
+    * `max_length` parameter: not specified
+    * `report` parameter: specified
+    * Return value of the function specified by the `report` parameter: True
+    """
+    def test(text):
+      self.assertEqual(text, "testing\n")
+      return True
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("testing")
+    rlh.get_text(report=test)
+    self.assertEqual(rlh.get_text(), "")
+
+  def test_get_text_report_cancelled(self):
+    """
+    When `ReporterLogHandler#get_text()` is called under the following conditions,
+    The text is passed to the function, and the return value of the function determines whether or not to commit.
+    * `max_length` parameter: not specified
+    * `report` parameter: specified
+    * Return value of the function specified by the `report` parameter: False
+    """
+    def test(text):
+      self.assertEqual(text, "testing\n")
+      return False
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("testing")
+    rlh.get_text(report=test)
+    self.assertEqual(rlh.get_text().strip(), "testing")
+
+  def test_get_text_report_max_length_commited(self):
+    """
+    When `ReporterLogHandler#get_text()` is called under the following conditions,
+    The text is passed to the function, and the return value of the function determines whether or not to commit.
+    * `max_length` parameter: specified
+    * `report` parameter: specified
+    * Return value of the function specified by the `report` parameter: True
+    """
+    def test(text):
+      self.assertEqual(text, "testing")
+      return True
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("testing")
+    logger.warn("message")
+    rlh.get_text(max_length=7,report=test)
+    self.assertEqual(rlh.get_text().strip(), "message")
+
+  def test_get_text_report_max_length_cancelled(self):
+    """
+    When `ReporterLogHandler#get_text()` is called under the following conditions,
+    The text is passed to the function, and the return value of the function determines whether or not to commit.
+    * `max_length` parameter: specified
+    * `report` parameter: specified
+    * Return value of the function specified by the `report` parameter: False
+    """
+    def test(text):
+      self.assertEqual(text, "testing")
+      return False
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("testing")
+    logger.warn("message")
+    rlh.get_text(max_length=7,report=test)
+    self.assertEqual(rlh.get_text().strip(), "testing\nmessage")
+
+  def test_get_text_report_max_length_2line(self):
+    """
+    When `ReporterLogHandler#get_text()` is called under the following conditions,
+    The text is passed to the function, and the return value of the function determines whether or not to commit.
+    * `max_length` parameter: specified
+    * `report` parameter: specified
+    * Return value of the function specified by the `report` parameter: True
+    * Number of characters specified for `max_length`: 2 lines of text
+    """
+    def test(text):
+      self.assertEqual(text, "testing\nmessage")
+      return True
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("testing")
+    logger.warn("message")
+    logger.warn("abcdefg")
+    rlh.get_text(max_length=20,report=test)
+    self.assertEqual(rlh.get_text().strip(), "abcdefg")
+
+  #endregion
+
   #region clear() test
 
   def test_clear(self):

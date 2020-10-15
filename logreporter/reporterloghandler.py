@@ -53,7 +53,7 @@ class ReporterLogHandler(logging.FileHandler):
       self.close()
       self._filename.unlink()
 
-  def get_text(self, max_length=-1):
+  def get_text(self, max_length=-1, report=None):
     """
     Get all the log strings written so far.
 
@@ -63,6 +63,13 @@ class ReporterLogHandler(logging.FileHandler):
       Maximum number of characters requested.
       If this value is set, get the text with the number of lines closest to this number of characters and return it.
       Also, in this case, the unacquired text is saved in the internal log file.
+    report: func(text) -> bool or None
+      A function for reporting.
+      If you set a function object here, this function will be called just before extracting the log text and saving the extracted text.
+      The character string itself extracted from the log is stored as a parameter.
+
+      The function also returns a bool value as a return value.
+      If false is returned, it is considered as a report failure and the text extraction process is not committed.
 
     Returns
     ----
@@ -84,9 +91,11 @@ class ReporterLogHandler(logging.FileHandler):
             result.append(t)
             lines.pop(0)
             max_length -= len("\n") # Newline character.
-        with open(self._filename, mode="w", encoding="utf-8") as f:
-          f.write("\n".join(lines))
         text = "\n".join(result)
+        if report is None or report(text):
+          with open(self._filename, mode="w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
       else:
-        self.clear()
+        if report is None or report(text):
+          self.clear()
     return text
