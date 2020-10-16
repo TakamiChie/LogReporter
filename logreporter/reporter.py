@@ -32,8 +32,9 @@ class Reporter(object):
     self._handler = ReporterLogHandler(filename=filename)
     self.enabled = enabled
     self.logger = None
+    self.reporter = None
 
-  def setup(self, logger):
+  def setup(self, logger, reporter):
     """
     Set up the Reporter object.
 
@@ -41,9 +42,25 @@ class Reporter(object):
     ----
     logger: logging.Logger
       Logger object.
+    reporter: AbstractReporter
+      Reporter object.
     """
     self.logger = logger
+    self.reporter = reporter
     logger.addHandler(self._handler)
+
+  def upload_report(self, message):
+    """
+    Extract the log and send it.
+    The transmission process depends on the reporter object set in `Reporter # setup ()`.
+
+    Parameters
+    ----
+    message: str
+      Additional message when sending logs.
+    """
+    if self.reporter is not None:
+      self.reporter.request_report(self._handler)
 
   #region properties
 

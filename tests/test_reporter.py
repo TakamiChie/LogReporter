@@ -62,7 +62,7 @@ class TestReporter(unittest.TestCase):
     """
     logger = logging.getLogger("testlogger")
     reporter = Reporter()
-    reporter.setup(logger)
+    reporter.setup(logger, None)
     logger.warn("test message")
     self.assertFalse(reporter._handler.get_text() == "")
 
