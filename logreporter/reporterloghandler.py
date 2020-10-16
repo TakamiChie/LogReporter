@@ -37,6 +37,13 @@ class ReporterLogHandler(logging.FileHandler):
     if not value:
       self.clear()
 
+  @property
+  def has_text(self):
+    """
+    Check if the log text exists.
+    """
+    return self._filename.exists() and self._filename.stat().st_size > 0
+
   def emit(self, record):
     """
     Override method.

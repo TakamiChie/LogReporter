@@ -303,3 +303,41 @@ class TestReporterLogHandler(unittest.TestCase):
     self.assertTrue(rlh._filename.exists())
 
   #endregion
+
+  #region has_text test
+
+  def test_hastext_there_text(self):
+    """
+    When you refer to `ReporterLogHandler#has_text` under the following conditions, check that the value is True.
+    * Log file: Exists
+    * Log data: Not empty
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("test message")
+    self.assertTrue(rlh.has_text)
+
+  def test_hastext_empty_text(self):
+    """
+    When you refer to `ReporterLogHandler#has_text` under the following conditions, check that the value is False.
+    * Log file: Exists
+    * Log data: Empty
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("test message")
+    rlh.get_text(max_length=12)
+    self.assertFalse(rlh.has_text)
+
+  def test_hastext_empty_text(self):
+    """
+    When you refer to `ReporterLogHandler#has_text` under the following conditions, check that the value is False.
+    * Log file: Not exist
+    * Log data: N/A
+    """
+    rlh = ReporterLogHandler()
+    self.assertFalse(rlh.has_text)
+
+  #endregion
