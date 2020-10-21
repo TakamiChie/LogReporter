@@ -58,9 +58,17 @@ class Reporter(object):
     ----
     message: str
       Additional message when sending logs.
+
+    Returns
+    ----
+    successful: bool
+      A value that indicates whether all logs have been sent. If the log remains, it will be False.
     """
+    result = True
     if self.reporter is not None:
       self.reporter.request_report(self._handler)
+      result = not self._handler.has_text
+    return result
 
   #region properties
 
