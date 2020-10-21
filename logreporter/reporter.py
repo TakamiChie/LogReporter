@@ -86,6 +86,12 @@ class Reporter(object):
     """
     self._handler.enabled = value
 
+  def log_remaining(self):
+    """
+    Returns a value that indicates whether log data remains.
+    """
+    return self._handler.has_text
+
   #endregion
 
   #region for testing
