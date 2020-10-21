@@ -49,7 +49,7 @@ class Reporter(object):
     self.reporter = reporter
     logger.addHandler(self._handler)
 
-  def upload_report(self, message):
+  def upload_report(self, message=""):
     """
     Extract the log and send it.
     The transmission process depends on the reporter object set in `Reporter # setup ()`.
