@@ -86,6 +86,7 @@ class Reporter(object):
     """
     self._handler.enabled = value
 
+  @property
   def log_remaining(self):
     """
     Returns a value that indicates whether log data remains.
