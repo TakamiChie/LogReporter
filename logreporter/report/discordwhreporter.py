@@ -1,6 +1,7 @@
-from logreporter.report.abstractreporter import AbstractReporter
 import urllib.request
 import json
+
+from logreporter.report.abstractreporter import AbstractReporter
 
 class DiscordWHReporter(object):
   """
