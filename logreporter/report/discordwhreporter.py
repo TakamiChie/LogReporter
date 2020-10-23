@@ -1,5 +1,4 @@
-import urllib.request
-import json
+import requests
 
 from logreporter.report.abstractreporter import AbstractReporter
 
@@ -27,9 +26,8 @@ class DiscordWHReporter(object):
       payload = {
         "content": text
       }
-      req = urllib.request.Request(self.url, data=json.dumps(payload).encode(), headers=headers)
-      with urllib.request.urlopen(req) as res:
-        res.read()
+      res = requests.post(self.url, json=payload, headers=headers)
+      res.raise_for_status()
       return True
     headers = {"Content-Type": "application/json"}
     while log_handler.has_text:
