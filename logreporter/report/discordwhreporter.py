@@ -1,4 +1,5 @@
 import requests
+import time
 
 from logreporter.report.abstractreporter import AbstractReporter
 
@@ -32,3 +33,4 @@ class DiscordWHReporter(object):
     headers = {"Content-Type": "application/json"}
     while log_handler.has_text:
       log_handler.get_text(max_length=2000, report=send)
+      time.sleep(0.01)

@@ -45,4 +45,18 @@ class TestDiscordWHReporter(unittest.TestCase):
     reporter.upload_report()
     self.assertFalse(reporter.log_remaining)
 
+  def test_sendtext_2record(self):
+    """
+    When you send the following log using `DiscordWHReporter`, check that it can be sent.
+    * Number of characters: 3,000 characters
+    """
+    logger = logging.getLogger("testlogger")
+    reporter = Reporter()
+    reporter.setup(logger, self.reporter)
+    logger.warn("1234567890" * 100)
+    logger.warn("1234567890" * 100)
+    logger.warn("1234567890" * 100)
+    reporter.upload_report()
+    self.assertFalse(reporter.log_remaining)
+
   #endregion
