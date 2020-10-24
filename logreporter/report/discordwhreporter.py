@@ -25,7 +25,13 @@ class DiscordWHReporter(object):
     """
     def send(text):
       payload = {
-        "content": text
+        "content": message[:2000] if message != "" else __class__.__name__,
+        "embeds": [
+          {
+            "type": "article",
+            "description": text
+          }
+        ]
       }
       res = requests.post(self.url, json=payload, headers=headers)
       res.raise_for_status()
