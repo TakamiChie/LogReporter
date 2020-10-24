@@ -19,7 +19,7 @@ class DiscordWHReporter(object):
     """
     self.url = str(url)
 
-  def request_report(self, log_handler):
+  def request_report(self, log_handler, message=""):
     """
     Send logs using Discord's Webhook.
     """

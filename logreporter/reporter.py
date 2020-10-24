@@ -66,7 +66,7 @@ class Reporter(object):
     """
     result = True
     if self.reporter is not None:
-      self.reporter.request_report(self._handler)
+      self.reporter.request_report(self._handler, message)
       result = not self._handler.has_text
     return result
 
