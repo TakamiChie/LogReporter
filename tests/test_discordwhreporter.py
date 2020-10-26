@@ -31,7 +31,7 @@ class TestDiscordWHReporter(unittest.TestCase):
 
   #endregion
 
-  #region constructor test
+  #region Normal Department test
 
   def test_sendtext(self):
     """
