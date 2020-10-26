@@ -105,7 +105,7 @@ class TestDiscordWHReporter(unittest.TestCase):
     logger.warn("1234567890" * 100)
     with self.assertRaises(requests.exceptions.HTTPError):
       reporter.upload_report()
-    self.assertEqual(reporter._handler.get_text(), "1234567890" * 100)
+    self.assertEqual(reporter._handler.get_text().strip(), "1234567890" * 100)
 
   def test_sendtext_connection_error(self):
     """
