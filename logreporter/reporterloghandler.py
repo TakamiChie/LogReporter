@@ -56,9 +56,8 @@ class ReporterLogHandler(logging.FileHandler):
     """
     Delete all the log text of the actual acquisition.
     """
-    if self._filename.exists():
-      self.close()
-      self._filename.unlink()
+    with open(self._filename, mode="w", encoding="utf-8") as f:
+      f.write("")
 
   def get_text(self, max_length=-1, report=None):
     """

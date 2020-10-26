@@ -38,7 +38,7 @@ class TestReporterLogHandler(unittest.TestCase):
     logger.warn("test message")
     self.assertTrue(path.exists())
     rlh.get_text()
-    self.assertFalse(path.exists())
+    self.assertFalse(rlh.has_text )
 
   #endregion
 
@@ -54,7 +54,7 @@ class TestReporterLogHandler(unittest.TestCase):
     logger.addHandler(rlh)
     logger.warn("test message")
     self.assertFalse(rlh.get_text() == "")
-    self.assertFalse(rlh._filename.exists())
+    self.assertFalse(rlh.has_text)
 
   def test_get_text_debug(self):
     """
@@ -279,7 +279,7 @@ class TestReporterLogHandler(unittest.TestCase):
     logger.warn("test message")
     logger.warn("test message")
     rlh.clear()
-    self.assertFalse(rlh._filename.exists())
+    self.assertFalse(rlh.has_text)
 
   #endregion
 
@@ -297,10 +297,10 @@ class TestReporterLogHandler(unittest.TestCase):
     logger.warn("test message")
     rlh.enabled = False
     logger.warn("test message")
-    self.assertFalse(rlh._filename.exists())
+    self.assertFalse(rlh.has_text)
     rlh.enabled = True
     logger.warn("test message")
-    self.assertTrue(rlh._filename.exists())
+    self.assertTrue(rlh.has_text)
 
   #endregion
 
