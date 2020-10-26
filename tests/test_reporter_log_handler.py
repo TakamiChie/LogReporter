@@ -341,3 +341,19 @@ class TestReporterLogHandler(unittest.TestCase):
     self.assertFalse(rlh.has_text)
 
   #endregion
+
+  #region Anomaly test.
+
+  def test_handler_multiple_registration(self):
+    """
+    Confirm that `ReporterLogHandler#clear()` works normally with `ReporterLogHandler` registered in two loggers.
+    """
+    rlh = ReporterLogHandler()
+    rlh2 = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.addHandler(rlh2)
+    logger.warn("test message")
+    rlh.clear()
+
+  #endregion
