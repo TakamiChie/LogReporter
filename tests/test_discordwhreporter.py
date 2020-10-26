@@ -2,6 +2,8 @@ import json
 import logging
 import unittest
 
+import requests
+
 from logreporter.reporter import Reporter
 from logreporter.report.discordwhreporter import DiscordWHReporter
 
@@ -82,5 +84,23 @@ class TestDiscordWHReporter(unittest.TestCase):
     logger.warn("1234567890" * 100)
     reporter.upload_report()
     self.assertFalse(reporter.log_remaining)
+
+  #endregion
+
+  #region Anomaly test
+
+  def test_sendtext_404(self):
+    """
+    When you send the following log using `DiscordWHReporter`, Confirm that HTTPError occurs and the transmission process is interrupted.
+    * Wrong URL
+    """
+    self.reporter = DiscordWHReporter("https://discord.com/api/404")
+    logger = logging.getLogger("testlogger")
+    reporter = Reporter()
+    reporter.setup(logger, self.reporter)
+    logger.warn("1234567890" * 100)
+    with self.assertRaises(requests.exceptions.HTTPError):
+      reporter.upload_report()
+    self.assertEqual(reporter._handler.get_text(), "1234567890" * 100)
 
   #endregion
