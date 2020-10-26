@@ -21,14 +21,17 @@ class TestDiscordWHReporter(unittest.TestCase):
     with open("tests/test.json") as f:
       data = json.load(f)
       self.reporter = DiscordWHReporter(data["discordwh"]["url"])
+    logger = logging.getLogger("testlogger")
+    logger.handlers.clear()
+    rlh = Reporter()
+    if rlh._handler._filename.exists():
+      rlh._handler.close()
+      rlh._handler._filename.unlink()
 
   def tearDown(self):
     """
     Executed for each test method call.
     """
-    r = Reporter()
-    if r._handler._filename.exists():
-      r._handler._filename.unlink()
     Reporter.reset()
 
   #endregion
