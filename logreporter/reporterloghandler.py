@@ -69,6 +69,7 @@ class ReporterLogHandler(logging.FileHandler):
       Maximum number of characters requested.
       If this value is set, get the text with the number of lines closest to this number of characters and return it.
       Also, in this case, the unacquired text is saved in the internal log file.
+      If 1 or 0 is set for this value, ValueError will occur.
     report: func(text) -> bool or None
       A function for reporting.
       If you set a function object here, this function will be called just before extracting the log text and saving the extracted text.
@@ -82,6 +83,8 @@ class ReporterLogHandler(logging.FileHandler):
     text: str
       Log string.
     """
+    if max_length == 0 or max_length == 1:
+      raise ValueError("The value of max_length is out of range.")
     self.close()
     text = ""
     if self._filename.exists():

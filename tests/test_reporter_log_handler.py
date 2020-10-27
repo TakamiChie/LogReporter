@@ -344,6 +344,20 @@ class TestReporterLogHandler(unittest.TestCase):
 
   #region Anomaly test.
 
+  def test_get_text_max_length_valueerror(self):
+    """
+    When `ReporterLogHandler#get_text()` is called under the following conditions, Confirm that ValueError occurs.
+    * max_length=1 or 0
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("testing" * 30)
+    with self.assertRaises(ValueError):
+      rlh.get_text(max_length=1)
+    with self.assertRaises(ValueError):
+      rlh.get_text(max_length=0)
+
   def test_handler_multiple_registration(self):
     """
     Confirm that `ReporterLogHandler#clear()` works normally with `ReporterLogHandler` registered in two loggers.
