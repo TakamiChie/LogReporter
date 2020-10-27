@@ -166,6 +166,20 @@ class TestReporterLogHandler(unittest.TestCase):
     self.assertNotEqual(len(rlh.get_text(max_length=1000)), 0)
     self.assertEqual(rlh.get_text(), "")
 
+  def test_get_text_max_length_overtext(self):
+    """
+    When `ReporterLogHandler#get_text()` is called under the following conditions, confirm that the log of the specified number of characters is output.
+    Also, check that the log that exceeds the specified number of characters remains in the file.
+    * Specify the value of max_length as a value greater than the number of characters in the log.
+    * The value of max_length is greater than the number of characters first line in the log.
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("1" * 20 + "2" * 10)
+    self.assertEqual(rlh.get_text(max_length=20), "1" * 20)
+    self.assertEqual(rlh.get_text(), "2" * 10)
+
   #endregion
 
   #region get_text(report) test

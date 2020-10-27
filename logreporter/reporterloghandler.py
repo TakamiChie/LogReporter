@@ -93,14 +93,18 @@ class ReporterLogHandler(logging.FileHandler):
       if max_length != -1:
         lines = text.splitlines()
         result = []
-        while max_length > 0 and len(lines) > 0:
-          t = lines[0]
-          max_length -= len(t)
-          if max_length >= 0:
-            result.append(t)
-            lines.pop(0)
-            max_length -= len("\n") # Newline character.
-        text = "\n".join(result)
+        if len(lines[0]) > max_length:
+          text = lines[0][:max_length]
+          lines[0] = lines[0][max_length:]
+        else:
+          while max_length > 0 and len(lines) > 0:
+            t = lines[0]
+            max_length -= len(t)
+            if max_length >= 0:
+              result.append(t)
+              lines.pop(0)
+              max_length -= len("\n") # Newline character.
+          text = "\n".join(result)
         if report is None or report(text):
           with open(self._filename, mode="w", encoding="utf-8") as f:
             f.write("\n".join(lines))
