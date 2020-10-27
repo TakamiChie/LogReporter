@@ -11,12 +11,15 @@ class TestReporter(unittest.TestCase):
 
   #region prepare
 
-  def tearDown(self):
+  def setUp(self):
     """
     Executed for each test method call.
     """
+    logger = logging.getLogger("testlogger")
+    logger.handlers.clear()
     r = Reporter()
     if r._handler._filename.exists():
+      r._handler.close()
       r._handler._filename.unlink()
     Reporter.reset()
 
