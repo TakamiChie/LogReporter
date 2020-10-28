@@ -16,7 +16,7 @@ class ReporterLogHandler(logging.FileHandler):
       Log file name. If omitted, it will be created in the same folder as the module file.
     """
     # Place the log file in the same folder as the application or directly under the user folder.
-    self._filename = Path(__file__).parent / "reporter.log" if filename is None else filename
+    self._filename = self.get_defaultfilename() if filename is None else filename
     super().__init__(self._filename, encoding="utf-8", delay=True)
     self.setLevel(logging.WARNING)
     self._enabled = True
@@ -112,3 +112,10 @@ class ReporterLogHandler(logging.FileHandler):
         if report is None or report(text):
           self.clear()
     return text
+
+  @staticmethod
+  def get_defaultfilename():
+    """
+    Get the default log file name.
+    """
+    return Path(__file__).parent / "reporter.log"
