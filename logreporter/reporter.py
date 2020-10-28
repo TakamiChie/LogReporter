@@ -1,4 +1,6 @@
 
+import logging
+
 from logreporter.reporterloghandler import ReporterLogHandler
 
 class Reporter(object):
@@ -26,7 +28,7 @@ class Reporter(object):
     self.logger = None
     self.reporter = None
 
-  def setup(self, logger, reporter, filename=None, enabled=True, ):
+  def setup(self, logger, reporter, filename=None, format=None, enabled=True, ):
     """
     Set up the Reporter object.
 
@@ -38,14 +40,31 @@ class Reporter(object):
       Reporter object.
     filename: Path or str
       Log file name. If omitted, it will be created in the same folder as the module file.
+    format: logging.Formatter or str
+      Log output format.
     enabled: bool
       A flag that indicates whether to enable log collection. No logs are collected when set to False.
     """
     self._handler = ReporterLogHandler(filename=filename)
+    self.setformat(format)
     self.enabled = enabled
     self.logger = logger
     self.reporter = reporter
     logger.addHandler(self._handler)
+
+  def setformat(self, format):
+    """
+    Set the formatter for this handler.
+
+    Parameters
+    ----
+    format: logging.Formatter or str
+      Log output format.
+    """
+    if type(format) is logging.Formatter:
+      self._handler.setFormatter(format)
+    elif type(format) is str:
+      self._handler.setFormatter(logging.Formatter(format))
 
   def upload_report(self, message=""):
     """

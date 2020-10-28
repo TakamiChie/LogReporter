@@ -69,4 +69,24 @@ class TestReporter(unittest.TestCase):
     logger.warn("test message")
     self.assertFalse(reporter._handler.get_text() == "")
 
+  def test_setup_format_str(self):
+    """
+    If you specify a string in the format parameter of `Reporter#setup()`, check that the format is specified correctly.
+    """
+    reporter = Reporter()
+    logger = logging.getLogger("testlogger")
+    reporter.setup(logger, None, format="%(name)s %(message)s")
+    logger.warn("test message")
+    self.assertEqual(reporter._handler.get_text().strip(), "testlogger test message")
+
+  def test_setup_format_formatter(self):
+    """
+    If you specify a `logging.Formatter` object in the format parameter of `Reporter#setup()`, check that the format is specified correctly.
+    """
+    reporter = Reporter()
+    logger = logging.getLogger("testlogger")
+    reporter.setup(logger, None, format=logging.Formatter("%(name)s %(message)s"))
+    logger.warn("test message")
+    self.assertEqual(reporter._handler.get_text().strip(), "testlogger test message")
+
   #endregion
