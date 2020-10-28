@@ -4,6 +4,7 @@ import unittest
 
 import requests
 
+from logreporter.reporterloghandler import ReporterLogHandler
 from logreporter.reporter import Reporter
 from logreporter.report.discordwhreporter import DiscordWHReporter
 
@@ -23,10 +24,8 @@ class TestDiscordWHReporter(unittest.TestCase):
       self.reporter = DiscordWHReporter(data["discordwh"]["url"])
     logger = logging.getLogger("testlogger")
     logger.handlers.clear()
-    rlh = Reporter()
-    if rlh._handler._filename.exists():
-      rlh._handler.close()
-      rlh._handler._filename.unlink()
+    f = ReporterLogHandler.get_defaultfilename()
+    if f.exists(): f.unlink()
 
   def tearDown(self):
     """

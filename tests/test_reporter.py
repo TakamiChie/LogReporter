@@ -1,4 +1,5 @@
 import logging
+from logreporter.reporterloghandler import ReporterLogHandler
 from pathlib import Path
 import unittest
 
@@ -17,49 +18,48 @@ class TestReporter(unittest.TestCase):
     """
     logger = logging.getLogger("testlogger")
     logger.handlers.clear()
-    r = Reporter()
-    if r._handler._filename.exists():
-      r._handler.close()
-      r._handler._filename.unlink()
+    f = ReporterLogHandler.get_defaultfilename()
+    if f.exists(): f.unlink()
     Reporter.reset()
 
   #endregion
 
   #region constructor test
 
-  def test_constructor_default(self):
-    """
-    If you do not set any arguments in the constructor, make sure that the Reporter object is created by default.
-    """
-    reporter = Reporter()
-    self.assertEqual(reporter._handler._filename.parent.parent, Path(__file__).parent.parent)
-    self.assertEqual(reporter.enabled, True)
-
-  def test_constructor_hasparam(self):
-    """
-    If you set an argument in the constructor, make sure that the value is set in the Reporter object.
-    """
-    path = Path(__file__).parent / "out" / "test.log"
-    reporter = Reporter(filename=path, enabled=False)
-    self.assertEqual(reporter._handler._filename, path)
-    self.assertEqual(reporter.enabled, False)
-
   def test_constructor_twice(self):
     """
-    After getting an instance of `Reporter`, make sure that its arguments are ignored when calling the` Reporter` constructor again.
+    After getting an instance of `Reporter`, make sure that when you call the` Reporter` constructor again, you get the same instance.
     """
     reporter = Reporter()
-    path = Path(__file__).parent / "out" / "test.log"
-    reporter2 = Reporter(filename=path, enabled=False)
+    reporter2 = Reporter()
     self.assertEqual(reporter, reporter2)
-    self.assertEqual(reporter2._handler._filename.parent.parent, Path(__file__).parent.parent)
-    self.assertEqual(reporter2.enabled, True)
 
   #endregion
 
   #region setup test
 
-  def test_setup(self):
+  def test_setup_default(self):
+    """
+    If you do not set the optional parameters in `Reporter#setup()`, make sure that the log file is set with the default settings.
+    """
+    reporter = Reporter()
+    logger = logging.getLogger("testlogger")
+    reporter.setup(logger, None)
+    self.assertEqual(reporter._handler._filename.parent.parent, Path(__file__).parent.parent)
+    self.assertEqual(reporter.enabled, True)
+
+  def test_setup_hasparam(self):
+    """
+    If you set the optional parameters in `Reporter#setup()`, make sure that the value is set in the Reporter object.
+    """
+    path = Path(__file__).parent / "out" / "test.log"
+    reporter = Reporter()
+    logger = logging.getLogger("testlogger")
+    reporter.setup(logger, None, filename=path, enabled=False)
+    self.assertEqual(reporter._handler._filename, path)
+    self.assertEqual(reporter.enabled, False)
+
+  def test_setup_logging(self):
     """
     When the log is output to the logger set by `Reporter # setup ()`, confirm that `ReportLogHandler` records the log.
     """

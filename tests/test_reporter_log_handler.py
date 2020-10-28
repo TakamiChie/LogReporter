@@ -18,10 +18,8 @@ class TestReporterLogHandler(unittest.TestCase):
     """
     logger = logging.getLogger("testlogger")
     logger.handlers.clear()
-    rlh = ReporterLogHandler()
-    if rlh._filename.exists():
-      rlh.close()
-      rlh._filename.unlink()
+    f = ReporterLogHandler.get_defaultfilename()
+    if f.exists(): f.unlink()
 
   #endregion
 

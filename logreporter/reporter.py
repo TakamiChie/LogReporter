@@ -17,24 +17,16 @@ class Reporter(object):
       cls._instance.__initialize(*args, **kwargs)
     return cls._instance
 
-  def __initialize(self, filename=None, enabled=True):
+  def __initialize(self):
     """
     A method that behaves as a constructor.
     This method is only executed when there is no instance of this class in the process.
-
-    Parameters
-    ----
-    filename: Path or str
-      Log file name. If omitted, it will be created in the same folder as the module file.
-    enabled: bool
-      A flag that indicates whether to enable log collection. No logs are collected when set to False.
     """
-    self._handler = ReporterLogHandler(filename=filename)
-    self.enabled = enabled
+    self._handler = None
     self.logger = None
     self.reporter = None
 
-  def setup(self, logger, reporter):
+  def setup(self, logger, reporter, filename=None, enabled=True, ):
     """
     Set up the Reporter object.
 
@@ -44,7 +36,13 @@ class Reporter(object):
       Logger object.
     reporter: AbstractReporter
       Reporter object.
+    filename: Path or str
+      Log file name. If omitted, it will be created in the same folder as the module file.
+    enabled: bool
+      A flag that indicates whether to enable log collection. No logs are collected when set to False.
     """
+    self._handler = ReporterLogHandler(filename=filename)
+    self.enabled = enabled
     self.logger = logger
     self.reporter = reporter
     logger.addHandler(self._handler)
