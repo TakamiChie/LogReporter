@@ -18,7 +18,7 @@ class ReporterLogHandler(logging.FileHandler):
     # Place the log file in the same folder as the application or directly under the user folder.
     self._filename = Path(__file__).parent / "reporter.log" if filename is None else filename
     super().__init__(self._filename, encoding="utf-8", delay=True)
-    self.level == logging.WARNING
+    self.setLevel(logging.WARNING)
     self._enabled = True
 
   @property
