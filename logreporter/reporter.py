@@ -61,7 +61,7 @@ class Reporter(object):
     format: logging.Formatter or str
       Log output format.
     """
-    if type(format) is logging.Formatter:
+    if issubclass(type(format), logging.Formatter):
       self._handler.setFormatter(format)
     elif type(format) is str:
       self._handler.setFormatter(logging.Formatter(format))

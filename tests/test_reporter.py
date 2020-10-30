@@ -5,6 +5,9 @@ import unittest
 
 from logreporter.reporter import Reporter
 
+class FormatterSubclass(logging.Formatter):
+  pass
+
 class TestReporter(unittest.TestCase):
   """
   A test class that verifies the operation of `Reporter`.
@@ -85,7 +88,7 @@ class TestReporter(unittest.TestCase):
     """
     reporter = Reporter()
     logger = logging.getLogger("testlogger")
-    reporter.setup(logger, None, format=logging.Formatter("%(name)s %(message)s"))
+    reporter.setup(logger, None, format=FormatterSubclass("%(name)s %(message)s"))
     logger.warn("test message")
     self.assertEqual(reporter._handler.get_text().strip(), "testlogger test message")
 
