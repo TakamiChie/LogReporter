@@ -66,6 +66,17 @@ class Reporter(object):
     elif type(format) is str:
       self._handler.setFormatter(logging.Formatter(format))
 
+  def append_log(self, message):
+    """
+    Write simple text data to the log.
+
+    Parameters
+    ----
+    message: str
+      String to write to log.
+    """
+    self._handler.append_log(message)
+
   def upload_report(self, message=""):
     """
     Extract the log and send it.

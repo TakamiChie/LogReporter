@@ -295,6 +295,58 @@ class TestReporterLogHandler(unittest.TestCase):
 
   #endregion
 
+  #region append_log() test
+
+  def test_append_log(self):
+    """
+    Confirm that the log is stored when `ReportLogHandler#append_log ()` is called under the following conditions.
+    * No other text is stored in the log file.
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    rlh.append_log("test")
+    self.assertEquals(rlh.get_text(), "test\n")
+
+  def test_append_log_has_text(self):
+    """
+    Confirm that the log is stored when `ReportLogHandler#append_log ()` is called under the following conditions.
+    * The text already exists in the log file.
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    logger.warn("test message")
+    rlh.append_log("test")
+    self.assertEquals(rlh.get_text(), "test message\ntest\n")
+
+  def test_append_log_append_text(self):
+    """
+    Confirm that the log is stored when `ReportLogHandler#append_log ()` is called under the following conditions.
+    * メソッド呼び出し後にログを追加
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    rlh.append_log("test")
+    logger.warn("test message")
+    self.assertEquals(rlh.get_text(), "test\ntest message\n")
+
+  def test_append_log_no_format(self):
+    """
+    When calling `ReportLogHandler#append_log()` under the following conditions, make sure that the written text is not formatted.
+    * A formatter is specified for the logger.
+    """
+    rlh = ReporterLogHandler()
+    logger = logging.getLogger("testlogger")
+    logger.addHandler(rlh)
+    rlh.setFormatter(logging.Formatter('%(levelname)s - %(message)s'))
+    logger.warn("test message")
+    rlh.append_log("test")
+    self.assertTrue(rlh.get_text().endswith("\ntest\n"))
+
+  #endregion
+
   #region enabled test
 
   def test_enabled_false(self):

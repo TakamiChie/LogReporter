@@ -52,6 +52,24 @@ class ReporterLogHandler(logging.FileHandler):
     if self.enabled:
       super().emit(record)
 
+  def append_log(self, message):
+    """
+    Write simple text data to the log.
+
+    Parameters
+    ----
+    message: str
+      String to write to log.
+    """
+    if self.stream is None:
+      self.stream = self._open()
+    try:
+      stream = self.stream
+      stream.write(message + self.terminator)
+      self.flush()
+    except Exception:
+      self.handleError(message)
+
   def clear(self):
     """
     Delete all the log text of the actual acquisition.
