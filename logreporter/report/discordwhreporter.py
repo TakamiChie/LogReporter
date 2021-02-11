@@ -3,7 +3,7 @@ import time
 
 from logreporter.report.abstractreporter import AbstractReporter
 
-class DiscordWHReporter(object):
+class DiscordWHReporter(AbstractReporter):
   """
   Reporter notifications using Discord webhooks.
   """
