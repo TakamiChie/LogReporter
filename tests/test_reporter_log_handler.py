@@ -323,7 +323,7 @@ class TestReporterLogHandler(unittest.TestCase):
   def test_append_log_append_text(self):
     """
     Confirm that the log is stored when `ReportLogHandler#append_log ()` is called under the following conditions.
-    * メソッド呼び出し後にログを追加
+    * Add log after method call.
     """
     rlh = ReporterLogHandler()
     logger = logging.getLogger("testlogger")
